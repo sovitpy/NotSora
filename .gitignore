@@ -48,3 +48,6 @@ archive.zip
 # macOS
 .DS_Store
 
+poetry.lock
+*.env
+
