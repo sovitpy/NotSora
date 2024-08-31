@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 from inference_server.groq.infer import generate_manim_code, format_manim_code
 import requests
+import logging
 
 load_dotenv()
 
@@ -23,10 +24,18 @@ class Response(BaseModel):
 app = FastAPI()
 renderer_url = os.environ["RENDERER_URL"]
 
+logging.basicConfig(
+    level=logging.INFO,  # Set the logging level
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",  # Log format
+)
+
+logger = logging.getLogger(__name__)  # Create a logger object
+
 
 @app.post("/generate")
 async def render(req: Query) -> Response:
     query = req.query
+    logger.info(f"Request received with query: {query}")
     global_retry_count = 0
     code = generate_manim_code(query)
     formatted_code = format_manim_code(code)
@@ -60,4 +69,4 @@ async def render(req: Query) -> Response:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run("app:app", host="0.0.0.0", port=8001, reload=True)

@@ -51,3 +51,5 @@ archive.zip
 poetry.lock
 *.env
 
+/renderer/renderer/manim_code
+/renderer/renderer/manim_code/*
