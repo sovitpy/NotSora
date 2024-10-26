@@ -53,3 +53,4 @@ poetry.lock
 
 /renderer/renderer/manim_code
 /renderer/renderer/manim_code/*
+qdrant_storage
