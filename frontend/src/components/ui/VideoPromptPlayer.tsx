@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface VideoResponse {
     id: string;
@@ -16,6 +17,7 @@ const VideoPromptPlayer = () => {
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isRagEnabled, setIsRagEnabled] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,12 +27,12 @@ const VideoPromptPlayer = () => {
         setError(null);
 
         try {
-            const response = await fetch('https://notsora-api.itsmesovit.com/generate', {
+            const response = await fetch('http://notsora-api.itsmesovit.com/generate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ query, rag: false }),
+                body: JSON.stringify({ query, rag: isRagEnabled }),
             });
 
             if (!response.ok) {
@@ -59,29 +61,40 @@ const VideoPromptPlayer = () => {
             </CardHeader>
 
             <CardContent className="space-y-6">
-                <form onSubmit={handleSubmit} className="flex gap-3">
-                    <Input
-                        type="text"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Describe the video you want to generate..."
-                        className="flex-1"
-                        disabled={isLoading}
-                    />
-                    <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="min-w-[120px]"
-                    >
-                        {isLoading ? (
-                            <>
-                                <Loader className="w-4 h-4 mr-2 animate-spin" />
-                                Creating
-                            </>
-                        ) : (
-                            'Generate'
-                        )}
-                    </Button>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                    <div className="flex gap-3">
+                        <Input
+                            type="text"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            placeholder="Describe the video you want to generate..."
+                            className="flex-1"
+                            disabled={isLoading}
+                        />
+                        <Button
+                            type="submit"
+                            disabled={isLoading}
+                            className="min-w-[120px]"
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader className="w-4 h-4 mr-2 animate-spin" />
+                                    Creating
+                                </>
+                            ) : (
+                                'Generate'
+                            )}
+                        </Button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Checkbox id="terms" />
+                        <label
+                            htmlFor="terms"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            Enable RAG
+                        </label>
+                    </div>
                 </form>
 
                 {error && (
@@ -106,14 +119,15 @@ const VideoPromptPlayer = () => {
                     </div>
                 )}
 
-                {!videoUrl && !isLoading && (
-                    <div className="aspect-video rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center text-gray-400">
+{!videoUrl && !isLoading && (
+                    <div className="aspect-video rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center text-gray-500 dark:text-gray-300">
                         <div className="text-center">
                             <Video className="w-12 h-12 mx-auto mb-2 opacity-40" />
-                            <p>Your generated video will appear here</p>
+                            <p className="text-gray-600 dark:text-gray-300">Your generated video will appear here</p>
                         </div>
                     </div>
                 )}
+
             </CardContent>
         </Card>
     );

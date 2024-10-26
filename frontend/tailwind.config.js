@@ -2,11 +2,9 @@
 export default {
     darkMode: ["class"],
     content: [
-      "./index.html",
-      "./src/**/*.{js,ts,jsx,tsx}",
-      "./@/components/**/*.{ts,tsx}",
-	  './@/**/*.{ts,tsx}',
-    ],
+		// '@/**/*.{js,jsx,ts,tsx}', // <- HERE
+		"./src/**/*.{js,jsx,ts,tsx}",
+	  ],
   theme: {
   	extend: {
   		borderRadius: {
@@ -60,3 +58,4 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 }
+

@@ -1,20 +1,14 @@
-import './App.css';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { ThemeProvider } from "@/components/theme-provider"
+import VideoPromptPlayer from "./components/ui/VideoPromptPlayer";
+import { ModeToggle } from "./components/mode-toggle";
 
-function App() {
-
+export function App() {
   return (
-    <>
-      <p className="text-3xl font-bold underline">Hello</p>
-    </>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ModeToggle />
+      <VideoPromptPlayer />
+  </ThemeProvider>
   )
 }
 
-export default App
+export default App;
